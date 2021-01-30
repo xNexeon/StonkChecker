@@ -1,16 +1,19 @@
 from tkinter import *
 import pymongo
 from pprint import pprint
-##from tkinter import messagebox
+from yahoo_fin import stock_info as si
+import time
 
 
 ## Varables
 
-## Functions
+## Functions:
 
+##Screens
 def loginScreen(): # Main initial window
     global username_entryvar
     global pass_entryvar
+    global login_screen
     login_screen = Tk()
     
     username_entry = Entry(login_screen)
@@ -38,6 +41,7 @@ def regScreen(): # Registration screen
     global username_entry1var
     global pass_entryconfirmvar
     global pass_entry1var
+    global reg_screen
     reg_screen = Tk()
     
     
@@ -63,6 +67,68 @@ def regScreen(): # Registration screen
     reg_screen.geometry("245x140+10+10")
     reg_screen.resizable(False, False)
     reg_screen.mainloop()
+
+def stockScreen():
+    global gmepricelabel
+    global kosspricelabel
+    global amcpricelabel
+    global nokpricelabel
+    gmeprice = si.get_live_price("gme")
+    kossprice = si.get_live_price("koss")
+    amcprice = si.get_live_price("amc")
+    nokprice = si.get_live_price("nok")
+    stock_screen = Tk()
+    
+    gmelabel = Label(stock_screen, text="$GME: $", font=("verdana", 24))
+    gmelabel.place(x=24,y=5)
+        
+    kosslabel = Label(stock_screen, text="$KOSS: $", font=("verdana", 24))
+    kosslabel.place(x=5,y=50)
+    
+    amclabel = Label(stock_screen, text="$AMC: $", font=("verdana", 24))
+    amclabel.place(x=24,y=95)
+    
+    noklabel = Label(stock_screen, text="$NOK: $", font=("verdana", 24))
+    noklabel.place(x=24,y=140)
+
+    
+    gmepricelabel = Label(stock_screen, text="0", font=("verdana", 24))
+    gmepricelabel.place(x=165,y=5)
+    
+    kosspricelabel = Label(stock_screen, text="0", font=("verdana", 24))
+    kosspricelabel.place(x=165,y=50)
+        
+    amcpricelabel = Label(stock_screen, text="0", font=("verdana", 24))
+    amcpricelabel.place(x=165,y=95)
+    
+    nokpricelabel = Label(stock_screen, text="0", font=("verdana", 24))
+    nokpricelabel.place(x=165,y=140)
+    
+    
+    updatestockbtn = Button(stock_screen, text="Update Stonks", command=updateStocks)
+    updatestockbtn.place(x=105,y=500)
+    
+
+    
+    
+        
+       
+    
+    stock_screen.title('Stonks')
+    stock_screen.geometry("300x550+10+10")
+    stock_screen.resizable(False, False)
+    stock_screen.mainloop()
+
+
+def updateStocks():
+        gmeprice = round(si.get_live_price("gme"), 2)
+        kossprice = round(si.get_live_price("koss"), 2)
+        amcprice = round(si.get_live_price("amc"), 2)
+        nokprice = round(si.get_live_price("nok"), 2)
+        gmepricelabel["text"]=gmeprice
+        kosspricelabel["text"]=kossprice
+        amcpricelabel["text"]=amcprice
+        nokpricelabel["text"]=nokprice
     
 #### Buttons #####    
 def loginbtnPressed(): # Logs loginbtn Pressed
@@ -83,9 +149,11 @@ def actuallyRegister(): # Push registration info to monogInsert function
         mongopushRegister(username_push, password_push)
         print("Success (Pushing registration to database)")
         messagebox.showinfo(title="Success", message="Registration successful, you can now log in")
+        reg_screen.withdraw()
     else:
         print("pass_confirm isn't equal to password_push")
         messagebox.showerror(title="Error", message="Check your password and try again")
+        reg_screen.lift()
         
 
 def mongopushRegister(username_push, password_push): # Mongo registration push function
@@ -118,12 +186,17 @@ def mongoreadloginDb(): # Mongo check if login exists function
         accountval = 1
     if accountval == 1 :
         print("Login successful")
+        login_screen.withdraw()
+        stockScreen()
     else:
         print("Invalid credentials")
+        messagebox.showerror(title="Error", message="Incorrect credentials or account doesn't exist")
         
 
 
 loginScreen()
+        
+#stockScreen()
     
     
     
