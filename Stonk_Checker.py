@@ -61,7 +61,7 @@ def regScreen(): # Registration screen
     pass_entryconfirm.insert(0, "Confirm Password")
     pass_entryconfirmvar = pass_entryconfirm
     
-    register_btn1 = Button(reg_screen, text="Register", width=25, command=actuallyRegister)
+    register_btn1 = Button(reg_screen, text="Register", width=25, command=checkaccountExists)
     register_btn1.place(x=30,y=100)  
 
     reg_screen.title('Register')
@@ -121,7 +121,7 @@ def stockScreen():
     stock_screen.mainloop()
 
 
-def updateStocks():
+def updateStocks(): # Refresh stock prices script
         gmeprice = round(si.get_live_price("gme"), 2)
         kossprice = round(si.get_live_price("koss"), 2)
         amcprice = round(si.get_live_price("amc"), 2)
@@ -140,7 +140,26 @@ def registerbtnPressed(): # Logs registerbtn Pressed
     print("register_btn pressed (Opening reg window)")
     regScreen()
    
-#### Register functions ####   
+#### Register functions ####
+def checkaccountExists(): # Mongo check if login exists before registration function
+    username_login = str(username_entry1var.get())
+    client = pymongo.MongoClient("mongodb+srv://nex:nikodem2002@cluster0.3r7u0.mongodb.net/<dbname>?retryWrites=true&w=majority")
+    mydb = client["nexauthusers"]
+    mycol = mydb["users"]
+    myquery = { "username": username_login }
+    accountval = 0
+    
+    mydoc = mycol.find(myquery)
+    for x in mydoc:
+        print("Account exists in database")
+        accountval = 1
+    if accountval == 1 :
+        print("Account already exists in database")
+        messagebox.showerror(title="Error", message="Username is taken")
+    else:
+        print("Account doesnt exist yet")
+        actuallyRegister()
+
 def actuallyRegister(): # Push registration info to monogInsert function
     print("register_btn1 pressed (Actually registering user)")
     username_push = str(username_entry1var.get())
