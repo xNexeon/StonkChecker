@@ -7,7 +7,6 @@ import time
 
 ## Varables
 bullet = "\u2022"
-
 ## Functions:
 
 ##Screens
@@ -143,7 +142,7 @@ def registerbtnPressed(): # Logs registerbtn Pressed
 #### Register functions ####
 def checkaccountExists(): # Mongo check if login exists before registration function
     username_login = str(username_entry1var.get())
-    client = pymongo.MongoClient("mongodb+srv://nex:nikodem2002@cluster0.3r7u0.mongodb.net/<dbname>?retryWrites=true&w=majority")
+    client = pymongo.MongoClient("mongodb://nexeon:nikodem2002@loginbase-shard-00-00.8awof.mongodb.net:27017,loginbase-shard-00-01.8awof.mongodb.net:27017,loginbase-shard-00-02.8awof.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-gka0w6-shard-0&authSource=admin&retryWrites=true&w=majority")
     mydb = client["nexauthusers"]
     mycol = mydb["users"]
     myquery = { "username": username_login }
@@ -177,7 +176,7 @@ def actuallyRegister(): # Push registration info to monogInsert function
         
 
 def mongopushRegister(username_push, password_push): # Mongo registration push function
-    client = pymongo.MongoClient("mongodb+srv://nex:nikodem2002@cluster0.3r7u0.mongodb.net/<dbname>?retryWrites=true&w=majority")
+    client = pymongo.MongoClient("mongodb://nexeon:nikodem2002@loginbase-shard-00-00.8awof.mongodb.net:27017,loginbase-shard-00-01.8awof.mongodb.net:27017,loginbase-shard-00-02.8awof.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-gka0w6-shard-0&authSource=admin&retryWrites=true&w=majority")
     mydb = client["nexauthusers"]
     mycol = mydb["users"]
     datainsert = { "username": username_push, "password": password_push }
@@ -194,7 +193,7 @@ def actuallyLogin():
     
  
 def mongoreadloginDb(): # Mongo check if login exists function
-    client = pymongo.MongoClient("mongodb+srv://nex:nikodem2002@cluster0.3r7u0.mongodb.net/<dbname>?retryWrites=true&w=majority")
+    client = pymongo.MongoClient("mongodb://nexeon:nikodem2002@loginbase-shard-00-00.8awof.mongodb.net:27017,loginbase-shard-00-01.8awof.mongodb.net:27017,loginbase-shard-00-02.8awof.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-gka0w6-shard-0&authSource=admin&retryWrites=true&w=majority")
     mydb = client["nexauthusers"]
     mycol = mydb["users"]
     myquery = { "username": username_login, "password": password_login }
@@ -217,9 +216,5 @@ def mongoreadloginDb(): # Mongo check if login exists function
 loginScreen()
         
 #stockScreen()
-    
-    
-    
-    
-    
-    
+
+
